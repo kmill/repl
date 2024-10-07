@@ -19,7 +19,7 @@ def pickle (env : Environment) (path : FilePath) : IO Unit :=
 
 unsafe def unpickleAux (path : FilePath) : IO (Environment × CompactedRegion) := do
   let ((imports, map₂), region) ← _root_.unpickle (Array Import × PHashMap Name ConstantInfo) path
-  let env ← importModules imports.toList {} 0
+  let env ← importModules imports {} 0
   return (← env.replay (HashMap.ofList map₂.toList), region)
 
 /--

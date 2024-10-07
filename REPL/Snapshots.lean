@@ -80,7 +80,7 @@ unsafe def unpickleAux (path : FilePath) : IO (CommandSnapshot × CompactedRegio
   let ((imports, map₂, cmdState, cmdContext), region) ←
     _root_.unpickle (Array Import × PHashMap Name ConstantInfo × CompactableCommandSnapshot ×
       Command.Context) path
-  let env ← (← importModules imports.toList {} 0).replay (HashMap.ofList map₂.toList)
+  let env ← (← importModules imports {} 0).replay (HashMap.ofList map₂.toList)
   let p' : CommandSnapshot :=
   { cmdState := { cmdState with env }
     cmdContext }
@@ -285,7 +285,7 @@ unsafe def unpickleAux (path : FilePath) (cmd? : Option CommandSnapshot) :
   let env ← match cmd? with
   | none =>
     enableInitializersExecution
-    (← importModules imports.toList {} 0).replay (HashMap.ofList map₂.toList)
+    (← importModules imports {} 0).replay (HashMap.ofList map₂.toList)
   | some cmd =>
     cmd.cmdState.env.replay (HashMap.ofList map₂.toList)
   let p' : ProofSnapshot :=
